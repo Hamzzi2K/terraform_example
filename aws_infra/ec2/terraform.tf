@@ -1,4 +1,4 @@
-# aws_infra/network/terraform.tf
+#aws_infra/ec2/terraform.tf
 terraform {
   required_providers {
     aws = {
