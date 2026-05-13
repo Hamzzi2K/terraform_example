@@ -4,8 +4,8 @@ resource "aws_lb" "aws05_alb" {
   name               = "${var.prefix}-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [data.aws_security_group.aws05_http_sg.id]
-  subnets            = data.aws_subnets.aws05_public_subnets.ids
+  security_groups    = [data.terraform_remote_state.network.outputs.http_sg_id]
+  subnets            = data.terraform_remote_state.network.outputs.public_subnet_ids
 
   tags = {
     Name = "${var.prefix}-alb"
@@ -17,7 +17,7 @@ resource "aws_lb_target_group" "aws05_alb_was_group" {
   name     = "${var.prefix}-alb-was-group"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = data.aws_vpc.aws05_vpc.id
+  vpc_id   = data.terraform_remote_state.network.outputs.vpc_id
   health_check {
     path                = "/"
     protocol            = "HTTP" # "traffic-port"로 설정하면 ALB(대상그룹)가 사용하는 포트에서 헬스체크를 수행
@@ -36,7 +36,7 @@ resource "aws_lb_target_group" "aws05_alb_jenkins_group" {
   name     = "${var.prefix}-alb-jenkins-group"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = data.aws_vpc.aws05_vpc.id
+  vpc_id   = data.terraform_remote_state.network.outputs.vpc_id
   health_check {
     path                = "/login" # Jenkins의 로그인 페이지를 헬스체크 경로로 설정
     protocol            = "HTTP"   # "traffic-port"로 설정하면 ALB(대상그룹)가 사용하는 포트에서 헬스체크를 수행

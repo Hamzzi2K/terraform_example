@@ -1,21 +1,10 @@
 # aws_infra/alb/data.tf
 # AWS ALB 관련 데이터 소스 정의
-data "aws_vpc" "aws05_vpc" {
-  filter {
-    name   = "tag:Name"
-    values = ["${var.prefix}-vpc"]
+data "terraform_remote_state" "network" {
+  backend = "s3"
+  config = {
+    bucket = var.remote_state_bucket
+    key    = "network/terraform.tfstate"
+    region = var.region
   }
 }
-data "aws_subnets" "aws05_public_subnets" {
-  filter {
-    name   = "tag:Name"
-    values = ["${var.prefix}-public-subnet-*"]
-  }
-}
-data "aws_security_group" "aws05_http_sg" {
-  filter {
-    name   = "tag:Name"
-    values = ["${var.prefix}-http-sg"]
-  }
-}
-
