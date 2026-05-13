@@ -20,7 +20,7 @@ resource "aws_instance" "aws05_jenkins_server" {
   ]
 
   # data.tf (33번 라인 부근)에 정의된 인스턴스 프로파일 참조
-  iam_instance_profile = data.terraform_remote_state.iam.outputs.iam_instance_profile_name
+  iam_instance_profile = data.terraform_remote_state.iam.outputs.ec2_instance_profile_name
 
   user_data = <<-EOF
               #!/bin/bash
@@ -66,7 +66,7 @@ resource "aws_instance" "aws05_jenkins_server" {
 
 # ALB 대상 그룹에 프라이빗 젠킨스 인스턴스 연결
 resource "aws_lb_target_group_attachment" "aws05_jenkins_attach" {
-  target_group_arn = data.terraform_remote_state.alb.outputs.lb_jenkins_tg_arn
+  target_group_arn = data.terraform_remote_state.alb.outputs.jenkins_tg_arn
   target_id        = aws_instance.aws05_jenkins_server.id
   port             = 80
 }

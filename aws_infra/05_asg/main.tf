@@ -13,7 +13,7 @@ resource "aws_launch_template" "aws05_was_lt" {
   }
 
   iam_instance_profile {
-    name = data.terraform_remote_state.iam.outputs.iam_instance_profile_id
+    name = data.terraform_remote_state.iam.outputs.ec2_instance_profile_name
   }
 
   tag_specifications {
@@ -36,7 +36,7 @@ resource "aws_autoscaling_group" "aws05_was_asg" {
     version = "$Latest"
   }
 
-  target_group_arns = [data.terraform_remote_state.alb.outputs.lb_was_tg_arn]
+  target_group_arns = [data.terraform_remote_state.alb.outputs.was_tg_arn]
 
   min_size         = 1
   max_size         = 3
